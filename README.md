@@ -13,3 +13,5 @@ In the shell script:
 1. yum-repo-and-morpheus-install.sh, this file is using for Offline install morpheus on RHEL 7
 2. create-virtual-image.sh, this file is using for create virtual image with Morpheus function "Virtual Image", and you will need to create blueprint by manual
    (will automatic soon.) 
+
+3. ansible folder, the resource is from https://github.com/cuxtud/morpheus-ansible2/
