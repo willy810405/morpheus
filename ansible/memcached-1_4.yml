@@ -1,8 +1,0 @@
----
-- hosts: all
-  become: yes
-  become_method: sudo
-  gather_facts: yes
-
-  roles:
-    - memcached-1_4
