@@ -7,7 +7,7 @@ variable "region" {
 variable "instance_name" {
   description = "Name tag for the EC2 instance"
   type 	      = string
-  default     = "Test_EC2_from_Terraform"
+  default     = "EC2_Terraform"
 }
 
 variable "ami_id" {
