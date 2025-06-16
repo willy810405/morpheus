@@ -8,6 +8,11 @@
     state: present
     update_cache: yes
 
+- name: install debconf-utils
+  apt:
+    name: debconf-utils
+    state: present
+
 - name: setting MySQL root password
   debconf:
     name: mysql-server
