@@ -1,0 +1,47 @@
+---
+- name: install package
+  apt:
+    name:
+      - wget
+      - gnupg
+      - lsb-release
+    state: present
+    update_cache: yes
+
+- name: setting MySQL root password
+  debconf:
+    name: mysql-server
+    question: "mysql-server/root_password"
+    value: "{{ mysql_root_password }}"
+    vtype: "password"
+
+- name: comfirm root password
+  debconf:
+    name: mysql-server
+    question: "mysql-server/root_password_again"
+    value: "{{ mysql_root_password }}"
+    vtype: "password"
+
+- name: Install MySQL Server
+  apt:
+    name: mysql-server
+    state: present
+
+- name: Start MySQL
+  systemd:
+    name: mysql
+    state: started
+    enabled: yes
+
+- name: Create MySQL log file
+  file:
+    path: "{{ item }}"
+    state: touch
+    owner: mysql
+    group: mysql
+    mode: '0644'
+  loop:
+    - /var/log/mysql/mysql.log
+    - /var/log/mysql/slow.log
+    - /var/log/mysql/error.log
+

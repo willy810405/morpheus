@@ -1,9 +1,0 @@
----
-- hosts: all
-  tasks:
-  
-    - name: Run basic PowerShell script
-      ansible.windows.win_powershell:
-        script: |
-          echo "Hello World"
-      

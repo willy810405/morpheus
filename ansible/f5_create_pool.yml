@@ -1,6 +1,0 @@
----
-- name: This is to create a pool in f5
-  hosts: localhost
-
-  roles:
-    - f5-secret
