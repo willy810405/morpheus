@@ -12,7 +12,7 @@
   debconf:
     name: mysql-server
     question: "mysql-server/root_password"
-    value: "{{ lookup('cypher', 'secret/mysql_root') }}"
+    value: "{{ lookup('cypher', 'secret=secret/mysql_root') }}"
     vtype: "password"
 
 - name: comfirm root password
