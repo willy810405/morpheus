@@ -3,5 +3,4 @@
   become: yes
   gather_facts: yes
   roles:
-    - mysql
-
+    - mysql_8
