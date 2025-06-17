@@ -1,4 +1,22 @@
 ---
+- name: Backup original yum repo
+  copy:
+    src: /etc/yum.repos.d/
+    dest: /etc/yum.repos.d.bak/
+    remote_src: yes
+    mode: preserve
+
+- name: Replace CentOS 9 Stream repo with NCHC Taiwan mirror
+  get_url:
+    url: https://free.nchc.org.tw/centos-stream/9-stream/BaseOS/x86_64/os/
+    dest: /etc/yum.repos.d/CentOS-Stream.repo
+    mode: '0644'
+
+- name: Clean and rebuild yum cache
+  shell: |
+    dnf clean all
+    dnf makecache
+
 - name: Install required packages
   dnf:
     name: ["mysql-server", "python3-PyMySQL"]
@@ -25,4 +43,3 @@
     check_implicit_admin: true
     priv: "*.*:ALL,GRANT"
     state: present
-
