@@ -41,13 +41,24 @@
   failed_when: false
   changed_when: false
 
-- name: Set MySQL root password (initial or re-apply)
+- name: Set MySQL root password (first time)
   mysql_user:
     name: root
     host: localhost
     password: "{{ mysql_root_password }}"
-    login_password: "{{ mysql_temp_password.stdout | default(mysql_root_password) }}"
+    login_password: "{{ mysql_temp_password.stdout }}"
     check_implicit_admin: true
     priv: "*.*:ALL,GRANT"
     state: present
+  when: mysql_temp_password.stdout != ""
 
+- name: Ensure MySQL root password works (re-apply)
+  mysql_user:
+    name: root
+    host: localhost
+    password: "{{ mysql_root_password }}"
+    login_password: "{{ mysql_root_password }}"
+    check_implicit_admin: true
+    priv: "*.*:ALL,GRANT"
+    state: present
+  when: mysql_temp_password.stdout == ""
