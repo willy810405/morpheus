@@ -1,5 +1,5 @@
 ---
-- name: Set NCHC CentOS Stream repo manually
+- name: Set NCHC CentOS Stream BaseOS repo manually
   copy:
     dest: /etc/yum.repos.d/CentOS-Stream-BaseOS.repo
     content: |
@@ -9,7 +9,7 @@
       enabled=1
       gpgcheck=0
 
-- name: Set NCHC CentOS Stream AppStream repo
+- name: Set NCHC CentOS Stream AppStream repo manually
   copy:
     dest: /etc/yum.repos.d/CentOS-Stream-AppStream.repo
     content: |
@@ -23,8 +23,6 @@
   shell: |
     dnf clean all
     dnf makecache
-  args:
-    warn: false
 
 - name: Install required packages
   dnf:
