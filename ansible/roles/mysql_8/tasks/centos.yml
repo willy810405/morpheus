@@ -1,21 +1,7 @@
 ---
-- name: Install wget
+- name: Install required packages
   dnf:
-    name: wget
-    state: present
-
-- name: Download MySQL YUM repo with user-agent
-  shell: |
-    wget --user-agent="Mozilla/5.0" https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm -O /tmp/mysql.rpm
-
-- name: Install MySQL repository
-  dnf:
-    name: /tmp/mysql.rpm
-    state: present
-
-- name: Install MySQL server
-  dnf:
-    name: mysql-server
+    name: ["mysql-server", "python3-PyMySQL"]
     state: present
 
 - name: Start and enable mysqld
@@ -24,17 +10,19 @@
     state: started
     enabled: yes
 
-- name: Get temporary MySQL root password
+- name: Get temporary MySQL root password (may fail if not initial install)
   shell: grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}'
   register: mysql_temp_password
+  failed_when: false
   changed_when: false
 
-- name: Set MySQL root password
+- name: Set MySQL root password (initial or re-apply)
   mysql_user:
     name: root
     host: localhost
     password: "{{ mysql_root_password }}"
-    login_password: "{{ mysql_temp_password.stdout }}"
+    login_password: "{{ mysql_temp_password.stdout | default(mysql_root_password) }}"
     check_implicit_admin: true
     priv: "*.*:ALL,GRANT"
     state: present
+

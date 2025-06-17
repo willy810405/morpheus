@@ -1,22 +1,7 @@
 ---
 - name: Install required packages
   apt:
-    name: ['wget', 'lsb-release', 'gnupg']
-    state: present
-    update_cache: yes
-
-- name: Download MySQL APT config with user-agent
-  shell: |
-    wget --user-agent="Mozilla/5.0" https://dev.mysql.com/get/mysql-apt-config_0.8.29-1_all.deb -O /tmp/mysql.deb
-
-- name: Install MySQL APT config
-  apt:
-    deb: /tmp/mysql.deb
-    state: present
-
-- name: Install MySQL Server
-  apt:
-    name: mysql-server
+    name: ["mysql-server", "python3-pymysql"]
     state: present
     update_cache: yes
 
@@ -35,3 +20,4 @@
     check_implicit_admin: true
     priv: "*.*:ALL,GRANT"
     state: present
+
