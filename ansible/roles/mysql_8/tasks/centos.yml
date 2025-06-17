@@ -1,7 +1,16 @@
 ---
+- name: Install wget
+  dnf:
+    name: wget
+    state: present
+
+- name: Download MySQL YUM repo with user-agent
+  shell: |
+    wget --user-agent="Mozilla/5.0" https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm -O /tmp/mysql.rpm
+
 - name: Install MySQL repository
   dnf:
-    name: https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm
+    name: /tmp/mysql.rpm
     state: present
 
 - name: Install MySQL server
@@ -29,4 +38,3 @@
     check_implicit_admin: true
     priv: "*.*:ALL,GRANT"
     state: present
-
