@@ -1,0 +1,36 @@
+---
+- name: Install required packages
+  apt:
+    name: ['wget', 'lsb-release', 'gnupg']
+    state: present
+    update_cache: yes
+
+- name: Add MySQL APT repository
+  shell: |
+    wget https://dev.mysql.com/get/mysql-apt-config_0.8.29-1_all.deb -O /tmp/mysql.deb
+    DEBIAN_FRONTEND=noninteractive dpkg -i /tmp/mysql.deb
+  args:
+    warn: false
+
+- name: Install MySQL Server
+  apt:
+    name: mysql-server
+    state: present
+    update_cache: yes
+
+- name: Start and enable MySQL
+  service:
+    name: mysql
+    state: started
+    enabled: yes
+
+- name: Set MySQL root password
+  mysql_user:
+    name: root
+    host: localhost
+    password: "{{ mysql_root_password }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    check_implicit_admin: true
+    priv: "*.*:ALL,GRANT"
+    state: present
+

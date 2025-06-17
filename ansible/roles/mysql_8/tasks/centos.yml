@@ -1,0 +1,32 @@
+---
+- name: Install MySQL repository
+  dnf:
+    name: https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm
+    state: present
+
+- name: Install MySQL server
+  dnf:
+    name: mysql-server
+    state: present
+
+- name: Start and enable mysqld
+  service:
+    name: mysqld
+    state: started
+    enabled: yes
+
+- name: Get temporary MySQL root password
+  shell: grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}'
+  register: mysql_temp_password
+  changed_when: false
+
+- name: Set MySQL root password
+  mysql_user:
+    name: root
+    host: localhost
+    password: "{{ mysql_root_password }}"
+    login_password: "{{ mysql_temp_password.stdout }}"
+    check_implicit_admin: true
+    priv: "*.*:ALL,GRANT"
+    state: present
+
