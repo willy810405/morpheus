@@ -2,6 +2,7 @@
 - name: Install MySQL 8 on Ubuntu 24.04 or CentOS 9-Stream
   hosts: all
   become: yes
+  gather_facts: false
   vars:
     mysql_root_password: "{{ lookup('cypher', 'secret=secret/mysql_root') }}"
     ansible_remote_tmp: /tmp/ansible
@@ -14,4 +15,3 @@
     - name: Include CentOS tasks
       include_tasks: roles/mysql_8/tasks/centos.yml
       when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '9'
-
