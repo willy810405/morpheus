@@ -1,37 +1,30 @@
 ---
-- name: Install CentOS Stream official repos
-  dnf:
-    name: centos-stream-repos
-    state: present
+- name: Set NCHC CentOS Stream repo manually
+  copy:
+    dest: /etc/yum.repos.d/CentOS-Stream-BaseOS.repo
+    content: |
+      [baseos]
+      name=CentOS Stream 9 - BaseOS
+      baseurl=https://free.nchc.org.tw/centos-stream/9-stream/BaseOS/$basearch/os/
+      enabled=1
+      gpgcheck=0
 
-- name: Replace BaseOS baseurl with NCHC mirror
-  replace:
-    path: /etc/yum.repos.d/CentOS-Stream-BaseOS.repo
-    regexp: '^baseurl=.*'
-    replace: 'baseurl=https://free.nchc.org.tw/centos-stream/9-stream/BaseOS/$basearch/os/'
+- name: Set NCHC CentOS Stream AppStream repo
+  copy:
+    dest: /etc/yum.repos.d/CentOS-Stream-AppStream.repo
+    content: |
+      [appstream]
+      name=CentOS Stream 9 - AppStream
+      baseurl=https://free.nchc.org.tw/centos-stream/9-stream/AppStream/$basearch/os/
+      enabled=1
+      gpgcheck=0
 
-- name: Replace AppStream baseurl with NCHC mirror
-  replace:
-    path: /etc/yum.repos.d/CentOS-Stream-AppStream.repo
-    regexp: '^baseurl=.*'
-    replace: 'baseurl=https://free.nchc.org.tw/centos-stream/9-stream/AppStream/$basearch/os/'
-
-- name: Disable mirrorlist in BaseOS repo
-  replace:
-    path: /etc/yum.repos.d/CentOS-Stream-BaseOS.repo
-    regexp: '^mirrorlist=.*'
-    replace: '#mirrorlist disabled'
-
-- name: Disable mirrorlist in AppStream repo
-  replace:
-    path: /etc/yum.repos.d/CentOS-Stream-AppStream.repo
-    regexp: '^mirrorlist=.*'
-    replace: '#mirrorlist disabled'
-
-- name: Rebuild yum cache
+- name: Clean and rebuild yum cache
   shell: |
     dnf clean all
     dnf makecache
+  args:
+    warn: false
 
 - name: Install required packages
   dnf:
@@ -59,3 +52,4 @@
     check_implicit_admin: true
     priv: "*.*:ALL,GRANT"
     state: present
+
