@@ -1,7 +1,7 @@
 #!/bin/bash
 
-MORPHEUS_URL="morpheus.hpe-taiwan-cic.net"
-TOKEN="6a32ed32-8724-493f-a5fa-3113cabb8f7d"
+MORPHEUS_URL=""
+TOKEN=""
 
 curl -k --request POST \
      --url https://$MORPHEUS_URL/api/virtual-images \
