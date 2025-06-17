@@ -6,9 +6,14 @@
     remote_src: yes
     mode: preserve
 
-- name: Replace CentOS 9 Stream repo with NCHC Taiwan mirror
+- name: Remove invalid CentOS-Stream.repo (if exists)
+  file:
+    path: /etc/yum.repos.d/CentOS-Stream.repo
+    state: absent
+
+- name: Download CentOS Stream 9 repo from NCHC mirror (NTU)
   get_url:
-    url: https://free.nchc.org.tw/centos-stream/9-stream/BaseOS/x86_64/os/
+    url: https://raw.githubusercontent.com/ntu-mirrors/centos-mirror/main/CentOS-Stream-9.repo
     dest: /etc/yum.repos.d/CentOS-Stream.repo
     mode: '0644'
 
@@ -43,3 +48,4 @@
     check_implicit_admin: true
     priv: "*.*:ALL,GRANT"
     state: present
+
