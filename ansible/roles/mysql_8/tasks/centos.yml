@@ -1,4 +1,3 @@
-# roles/mysql_8/tasks/centos.yml
 ---
 - name: Install CentOS Stream official repos
   dnf:
@@ -10,14 +9,12 @@
     path: /etc/yum.repos.d/CentOS-Stream-BaseOS.repo
     regexp: '^baseurl=.*'
     replace: 'baseurl=https://free.nchc.org.tw/centos-stream/9-stream/BaseOS/$basearch/os/'
-  notify: Rebuild yum cache
 
 - name: Replace AppStream baseurl with NCHC mirror
   replace:
     path: /etc/yum.repos.d/CentOS-Stream-AppStream.repo
     regexp: '^baseurl=.*'
     replace: 'baseurl=https://free.nchc.org.tw/centos-stream/9-stream/AppStream/$basearch/os/'
-  notify: Rebuild yum cache
 
 - name: Disable mirrorlist in BaseOS repo
   replace:
@@ -35,7 +32,6 @@
   shell: |
     dnf clean all
     dnf makecache
-  listen: Rebuild yum cache
 
 - name: Install required packages
   dnf:
@@ -63,4 +59,3 @@
     check_implicit_admin: true
     priv: "*.*:ALL,GRANT"
     state: present
-
